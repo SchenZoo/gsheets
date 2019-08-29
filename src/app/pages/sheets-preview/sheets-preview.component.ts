@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { GoogleSheetService } from 'src/app/services/google-sheet.service'
-import { GoogleAuthService } from 'src/app/services/google-auth.service'
+import { ApiSheetService } from 'src/app/services/api-sheet.service'
 
 @Component({
   selector: 'app-sheets-preview',
@@ -10,7 +10,10 @@ import { GoogleAuthService } from 'src/app/services/google-auth.service'
 export class SheetsPreviewComponent implements OnInit {
   public googleSheets: any[]
   public displayedColumns: string[] = ['Title', 'ID', 'Link', 'Action']
-  constructor(private sheetsService: GoogleSheetService) {
+  constructor(
+    private sheetsService: GoogleSheetService,
+    private apiSheetService: ApiSheetService
+  ) {
     this.sheetsService.sheetsObservable.subscribe(sheets => {
       this.googleSheets = sheets
     })
@@ -19,6 +22,12 @@ export class SheetsPreviewComponent implements OnInit {
   ngOnInit() {}
 
   navigate(link: string) {
-    location.href = link
+    window.open(link, '_blank')
+  }
+
+  concatSheet(spreadsheetId: string) {
+    this.apiSheetService.concatSheetData(spreadsheetId).subscribe(res => {
+      console.log(res)
+    })
   }
 }

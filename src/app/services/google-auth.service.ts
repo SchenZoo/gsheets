@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core'
 import { BehaviorSubject, ReplaySubject } from 'rxjs'
 import { environment } from 'src/environments/environment'
 import { Router } from '@angular/router'
+import { User } from '../models/user'
 
 @Injectable({
   providedIn: 'root',
 })
 export class GoogleAuthService {
   googleAuth: gapi.auth2.GoogleAuth
-  private userSubject = new ReplaySubject<null | gapi.auth2.BasicProfile>(1)
+  private userSubject = new ReplaySubject<null | User>(1)
   public userObservable = this.userSubject.asObservable()
   private loggedInSubject = new ReplaySubject<boolean>(1)
   public loggedInObservable = this.loggedInSubject.asObservable()
@@ -36,7 +37,7 @@ export class GoogleAuthService {
             this.googleAuth = gapi.auth2.getAuthInstance()
             this.loggedInSubject.next(this.isSignedIn)
             if (this.isSignedIn) {
-              this.userSubject.next(this.googleAuth.currentUser.get().getBasicProfile())
+              this.userSubject.next(this.getUser())
             } else {
             }
             resolve()
@@ -49,10 +50,28 @@ export class GoogleAuthService {
     return this.googleAuth.isSignedIn.get()
   }
 
+  private getUser() {
+    const profile = this.googleAuth.currentUser.get().getBasicProfile()
+    const token = this.googleAuth.currentUser.get().getAuthResponse(true).access_token
+    const backendToken = this.googleAuth.currentUser.get().getAuthResponse(true).id_token
+    const user = new User(
+      profile.getId(),
+      profile.getName(),
+      profile.getEmail(),
+      profile.getImageUrl(),
+      profile.getGivenName(),
+      profile.getFamilyName(),
+      token,
+      backendToken
+    )
+    return user
+  }
+
   signIn() {
-    return this.googleAuth.signIn().then((googleUser: gapi.auth2.GoogleUser) => {
+    return this.googleAuth.signIn().then(response => {
       this.loggedInSubject.next(true)
-      this.userSubject.next(googleUser.getBasicProfile())
+      this.userSubject.next(this.getUser())
+      this.googleAuth.grantOfflineAccess().then(res => console.log(res.code))
     })
   }
 

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { GoogleAuthService } from 'src/app/services/google-auth.service'
 import { Router } from '@angular/router'
+import { User } from 'src/app/models/user'
 
 @Component({
   selector: 'app-navigation',
@@ -9,13 +10,14 @@ import { Router } from '@angular/router'
 })
 export class NavigationComponent implements OnInit {
   public loggedIn: boolean = null
-  public user: gapi.auth2.BasicProfile = null
+  public user: User = null
 
   constructor(private googleAuthService: GoogleAuthService, private router: Router) {
     this.googleAuthService.loggedInObservable.subscribe(
       logStatus => (this.loggedIn = logStatus)
     )
     this.googleAuthService.userObservable.subscribe(user => {
+      console.log(user)
       this.user = user
     })
   }

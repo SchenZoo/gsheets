@@ -1,6 +1,6 @@
 <mat-toolbar>
-  <span>Test Google Sheets</span>
-  <span *ngIf="user">{{ user.getId() }}</span>
+  <h2>Test Google Sheets</h2>
+  <span class="nav-span" *ngIf="user">({{ user.email }})</span>
   <button mat-raised-button class="stick-right" *ngIf="loggedIn" (click)="signOut()">
     Log out
   </button>

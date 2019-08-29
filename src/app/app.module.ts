@@ -12,6 +12,8 @@ import { MatToolbarModule } from '@angular/material/toolbar'
 import { MatButtonModule } from '@angular/material/button'
 import { MatTableModule } from '@angular/material/table'
 import { MatIconModule } from '@angular/material/icon'
+import { httpInterceptorProviders } from './interceptors'
+import { HttpClientModule } from '@angular/common/http'
 
 export function initGapi(gapiSession: GoogleAuthService) {
   return () => gapiSession.initClient()
@@ -25,6 +27,7 @@ export function initGapi(gapiSession: GoogleAuthService) {
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     AppRoutingModule,
     MatToolbarModule,
     MatButtonModule,
@@ -39,6 +42,7 @@ export function initGapi(gapiSession: GoogleAuthService) {
       multi: true,
     },
     GoogleSheetService,
+    httpInterceptorProviders,
   ],
   bootstrap: [AppComponent],
 })
