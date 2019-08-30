@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, NgZone } from '@angular/core';
 import { GoogleAuthService } from '../../services/google-auth.service';
 import { Router } from '@angular/router';
 
@@ -9,7 +9,11 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent {
   public loggedIn;
-  constructor(private googleAuthService: GoogleAuthService, private router: Router) {
+  constructor(
+    private googleAuthService: GoogleAuthService,
+    private router: Router,
+    private ngZone: NgZone
+  ) {
     this.googleAuthService.loggedInObservable.subscribe(
       logStatus => (this.loggedIn = logStatus)
     );
@@ -17,7 +21,7 @@ export class LoginComponent {
 
   signInWithGoogle(): void {
     this.googleAuthService.signIn().then(_ => {
-      this.router.navigate(['sheets']);
+      this.ngZone.run(() => this.router.navigate(['sheets']));
     });
   }
 
