@@ -1,2 +1,9 @@
 .loggin-button {
+  position: absolute;
+  left: calc(50% - 150px);
+  top: calc(50% - 75px);
+  width: 300px;
+  height: 150px;
+  border-radius: 15%;
+  font-size: 30px;
 }

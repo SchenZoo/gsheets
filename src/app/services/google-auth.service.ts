@@ -21,7 +21,7 @@ export class GoogleAuthService {
     this.CLIENT_ID = environment.GOOGLE_AUTH_ID
     this.API_KEY = environment.GOOGLE_API_KEY
     this.SCOPES =
-      'https://www.googleapis.com/auth/drive.readonly https://www.googleapis.com/auth/spreadsheets.readonly'
+      'https://www.googleapis.com/auth/drive.readonly https://www.googleapis.com/auth/spreadsheets'
   }
 
   public initClient() {
@@ -71,7 +71,6 @@ export class GoogleAuthService {
     return this.googleAuth.signIn().then(response => {
       this.loggedInSubject.next(true)
       this.userSubject.next(this.getUser())
-      this.googleAuth.grantOfflineAccess().then(res => console.log(res.code))
     })
   }
 

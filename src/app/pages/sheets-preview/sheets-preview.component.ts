@@ -15,7 +15,9 @@ export class SheetsPreviewComponent implements OnInit {
     private apiSheetService: ApiSheetService
   ) {
     this.sheetsService.sheetsObservable.subscribe(sheets => {
-      this.googleSheets = sheets
+      this.googleSheets = sheets.filter(
+        sheet => sheet.mimeType === 'application/vnd.google-apps.spreadsheet'
+      )
     })
   }
 
@@ -26,8 +28,11 @@ export class SheetsPreviewComponent implements OnInit {
   }
 
   concatSheet(spreadsheetId: string) {
-    this.apiSheetService.concatSheetData(spreadsheetId).subscribe(res => {
-      console.log(res)
-    })
+    this.apiSheetService.concatSheetData(spreadsheetId).subscribe(
+      res => {
+        alert('Spreadsheet is updated')
+      },
+      err => alert('There was an error with the request!')
+    )
   }
 }
