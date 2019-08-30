@@ -1,13 +1,13 @@
-import { Injectable } from '@angular/core'
+import { Injectable } from '@angular/core';
 import {
   CanActivate,
   ActivatedRouteSnapshot,
   RouterStateSnapshot,
   UrlTree,
   Router,
-} from '@angular/router'
-import { Observable } from 'rxjs'
-import { GoogleAuthService } from '../services/google-auth.service'
+} from '@angular/router';
+import { Observable } from 'rxjs';
+import { GoogleAuthService } from '../services/google-auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -19,9 +19,9 @@ export class LoggedInGuard implements CanActivate {
     state: RouterStateSnapshot
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     if (!this.googleAuthService.isSignedIn) {
-      this.router.navigate(['login'])
-      return false
+      this.router.navigate(['login']);
+      return false;
     }
-    return true
+    return true;
   }
 }
